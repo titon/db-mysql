@@ -1,0 +1,25 @@
+{
+	"name": "titon/model-mysql",
+	"type": "library",
+	"description": "@todo",
+	"keywords": ["titon", "model", "driver", "mysql", "pdo"],
+	"homepage": "https://github.com/titon/Model.Mysql",
+	"license": "BSD-2",
+	"authors": [
+		{
+			"name": "Miles Johnson",
+			"homepage": "http://milesj.me"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"ext-pdo-mysql": "*",
+		"titon/model": "dev-master"
+	},
+	"require-dev": {
+		"titon/test": "*"
+	},
+	"autoload": {
+		"psr-0": { "Titon\\Model\\Mysql": "src/" }
+	}
+}
