@@ -19,29 +19,40 @@ class Mysql extends AbstractPdoDriver {
 
 	/**
 	 * Configuration.
-	 *
-	 * @type array {
-	 *		@type int $port	Default port
-	 * ]
 	 */
 	protected $_config = [
-		'port' => 3306
+		'port' => 3306,
+		'flags' => [
+			PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+		]
 	];
 
 	/**
-	 * Default MySQL flags.
-	 *
-	 * @type array
-	 */
-	protected $_flags = [
-		PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
-	];
-
-	/**
-	 * Set the dialect.
+	 * Set the dialect and commands to flags.
 	 */
 	public function initialize() {
 		$this->setDialect(new MysqlDialect($this));
+
+		$init = [];
+
+		if ($timezone = $this->config->timezone) {
+			if ($timezone === 'UTC') {
+				$timezone = '+0:00';
+			}
+
+			$init[] = sprintf("SET time_zone = '%s'", $timezone);
+		}
+
+		if ($encoding = $this->config->encoding) {
+			$init[] = 'SET NAMES ' . $encoding;
+		}
+
+		if ($init) {
+			$flags = $this->config->flags;
+			$flags[PDO::MYSQL_ATTR_INIT_COMMAND] = implode(';', $init);
+
+			$this->config->flags = $flags;
+		}
 	}
 
 	/**

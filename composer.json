@@ -13,11 +13,12 @@
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"ext-pdo-mysql": "*",
+		"ext-pdo_mysql": "*",
 		"titon/model": "dev-master"
 	},
 	"require-dev": {
-		"titon/test": "*"
+		"titon/test": "*",
+		"titon/cache": "*"
 	},
 	"autoload": {
 		"psr-0": { "Titon\\Model\\Mysql": "src/" }
