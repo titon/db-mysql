@@ -8,6 +8,7 @@
 namespace Titon\Model\Mysql;
 
 use Titon\Model\Driver\AbstractPdoDriver;
+use Titon\Model\Driver\Type;
 use \PDO;
 
 /**
@@ -37,14 +38,14 @@ class Mysql extends AbstractPdoDriver {
 
 		if ($timezone = $this->config->timezone) {
 			if ($timezone === 'UTC') {
-				$timezone = '+0:00';
+				$timezone = '+00:00';
 			}
 
-			$init[] = sprintf("SET time_zone = '%s'", $timezone);
+			$init[] = sprintf('SET time_zone = "%s"', $timezone);
 		}
 
 		if ($encoding = $this->config->encoding) {
-			$init[] = 'SET NAMES ' . $encoding;
+			$init[] = sprintf('SET NAMES %s', $encoding);
 		}
 
 		if ($init) {
@@ -60,6 +61,44 @@ class Mysql extends AbstractPdoDriver {
 	 */
 	public function getDriver() {
 		return 'mysql';
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getSupportedTypes() {
+		return [
+			'tinyint' => 'Titon\Model\Driver\Type\IntType',
+			'smallint' => 'Titon\Model\Driver\Type\IntType',
+			'mediumint' => 'Titon\Model\Driver\Type\IntType',
+			'int' => 'Titon\Model\Driver\Type\IntType',
+			'bigint' => 'Titon\Model\Driver\Type\BigintType',
+			'float' => 'Titon\Model\Driver\Type\FloatType',
+			'double' => 'Titon\Model\Driver\Type\DoubleType',
+			'decimal' => 'Titon\Model\Driver\Type\DecimalType',
+			'boolean' => 'Titon\Model\Mysql\Type\BooleanType',
+			'date' => 'Titon\Model\Driver\Type\DateType',
+			'datetime' => 'Titon\Model\Driver\Type\DatetimeType',
+			'timestamp' => 'Titon\Model\Driver\Type\DatetimeType',
+			'time' => 'Titon\Model\Driver\Type\TimeType',
+			'year' => 'Titon\Model\Driver\Type\YearType',
+			'char' => 'Titon\Model\Driver\Type\CharType',
+			'varchar' => 'Titon\Model\Driver\Type\StringType',
+			'tinytext' => 'Titon\Model\Driver\Type\TextType',
+			'mediumtext' => 'Titon\Model\Driver\Type\TextType',
+			'text' => 'Titon\Model\Driver\Type\TextType',
+			'longtext' => 'Titon\Model\Driver\Type\TextType',
+			'tinyblob' => 'Titon\Model\Driver\Type\BlobType',
+			'mediumblob' => 'Titon\Model\Driver\Type\BlobType',
+			'blob' => 'Titon\Model\Driver\Type\BlobType',
+			'longblob' => 'Titon\Model\Driver\Type\BlobType',
+			// bit
+			// serial
+			// binary
+			// varbinary
+			// enum
+			// set
+		];
 	}
 
 	/**
