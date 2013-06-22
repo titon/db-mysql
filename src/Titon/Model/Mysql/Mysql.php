@@ -50,7 +50,7 @@ class Mysql extends AbstractPdoDriver {
 
 		if ($init) {
 			$flags = $this->config->flags;
-			$flags[PDO::MYSQL_ATTR_INIT_COMMAND] = implode(';', $init);
+			$flags[PDO::MYSQL_ATTR_INIT_COMMAND] = implode('; ', $init);
 
 			$this->config->flags = $flags;
 		}
