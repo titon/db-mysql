@@ -17,11 +17,21 @@ if (!file_exists(VENDOR_DIR . '/autoload.php')) {
 
 $loader = require VENDOR_DIR . '/autoload.php';
 $loader->add('Titon\\Model\\Mysql', TEST_DIR);
+$loader->add('Titon\\Model\\Data', VENDOR_DIR . '/titon/model/tests');
 
 // Define database credentials
-Titon\Common\Config::set('db', [
-	'database' => 'armory',
-	'host' => 'localhost',
+$db = [
+	'database' => 'titon_test',
+	'host' => '127.0.0.1',
 	'user' => 'root',
-	'pass' => ''
-]);
+	'pass' => '',
+	'flags' => [
+		PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false
+	]
+];
+
+Titon\Common\Config::set('db', $db);
+
+// Used by models
+Titon\Common\Registry::factory('Titon\Model\Connection')
+	->addDriver(new Titon\Model\Mysql\Mysql('default', $db));

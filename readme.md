@@ -1,8 +1,6 @@
 # Model.Mysql [![Build Status](https://travis-ci.org/titon/Model.png)](https://travis-ci.org/titon/Model) #
 
-@todo
-
-### Features ###
+Provides MySQL access for the Titon Model package.
 
 ### Dependencies ###
 
@@ -11,3 +9,4 @@
 ### Requirements ###
 
 * PHP 5.4.0
+	* PDO-MySQL

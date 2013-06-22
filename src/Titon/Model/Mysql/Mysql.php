@@ -72,11 +72,11 @@ class Mysql extends AbstractPdoDriver {
 			'smallint' => 'Titon\Model\Driver\Type\IntType',
 			'mediumint' => 'Titon\Model\Driver\Type\IntType',
 			'int' => 'Titon\Model\Driver\Type\IntType',
+			'integer' => 'Titon\Model\Driver\Type\IntType',
 			'bigint' => 'Titon\Model\Driver\Type\BigintType',
 			'float' => 'Titon\Model\Driver\Type\FloatType',
 			'double' => 'Titon\Model\Driver\Type\DoubleType',
 			'decimal' => 'Titon\Model\Driver\Type\DecimalType',
-			'boolean' => 'Titon\Model\Mysql\Type\BooleanType',
 			'date' => 'Titon\Model\Driver\Type\DateType',
 			'datetime' => 'Titon\Model\Driver\Type\DatetimeType',
 			'timestamp' => 'Titon\Model\Driver\Type\DatetimeType',
@@ -92,12 +92,13 @@ class Mysql extends AbstractPdoDriver {
 			'mediumblob' => 'Titon\Model\Driver\Type\BlobType',
 			'blob' => 'Titon\Model\Driver\Type\BlobType',
 			'longblob' => 'Titon\Model\Driver\Type\BlobType',
-			// bit
-			// serial
-			// binary
-			// varbinary
+			'bit' => 'Titon\Model\Driver\Type\BinaryType',
+			'binary' => 'Titon\Model\Driver\Type\BinaryType',
+			'varbinary' => 'Titon\Model\Driver\Type\BinaryType',
+			'serial' => 'Titon\Model\Driver\Type\SerialType',
 			// enum
 			// set
+			'boolean' => 'Titon\Model\Mysql\Type\BooleanType',
 		];
 	}
 
