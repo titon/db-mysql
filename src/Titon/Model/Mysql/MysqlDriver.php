@@ -16,7 +16,7 @@ use \PDO;
  *
  * @package Titon\Model\Mysql
  */
-class Mysql extends AbstractPdoDriver {
+class MysqlDriver extends AbstractPdoDriver {
 
 	/**
 	 * Configuration.
@@ -29,31 +29,22 @@ class Mysql extends AbstractPdoDriver {
 	];
 
 	/**
-	 * Set the dialect and commands to flags.
+	 * Set the timezone being used.
 	 */
 	public function initialize() {
 		$this->setDialect(new MysqlDialect($this));
 
-		$init = [];
+		$flags = $this->config->flags;
 
 		if ($timezone = $this->config->timezone) {
 			if ($timezone === 'UTC') {
 				$timezone = '+00:00';
 			}
 
-			$init[] = sprintf('SET time_zone = "%s"', $timezone);
+			$flags[PDO::MYSQL_ATTR_INIT_COMMAND] = sprintf('SET time_zone = "%s";', $timezone);
 		}
 
-		if ($encoding = $this->config->encoding) {
-			$init[] = sprintf('SET NAMES %s', $encoding);
-		}
-
-		if ($init) {
-			$flags = $this->config->flags;
-			$flags[PDO::MYSQL_ATTR_INIT_COMMAND] = implode('; ', $init);
-
-			$this->config->flags = $flags;
-		}
+		$this->config->flags = $flags;
 	}
 
 	/**
@@ -77,6 +68,7 @@ class Mysql extends AbstractPdoDriver {
 			'float' => 'Titon\Model\Driver\Type\FloatType',
 			'double' => 'Titon\Model\Driver\Type\DoubleType',
 			'decimal' => 'Titon\Model\Driver\Type\DecimalType',
+			'boolean' => 'Titon\Model\Driver\Type\BooleanType',
 			'date' => 'Titon\Model\Driver\Type\DateType',
 			'datetime' => 'Titon\Model\Driver\Type\DatetimeType',
 			'timestamp' => 'Titon\Model\Driver\Type\DatetimeType',
@@ -98,7 +90,6 @@ class Mysql extends AbstractPdoDriver {
 			'serial' => 'Titon\Model\Driver\Type\SerialType',
 			// enum
 			// set
-			'boolean' => 'Titon\Model\Mysql\Type\BooleanType',
 		];
 	}
 

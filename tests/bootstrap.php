@@ -24,14 +24,11 @@ $db = [
 	'database' => 'titon_test',
 	'host' => '127.0.0.1',
 	'user' => 'root',
-	'pass' => '',
-	'flags' => [
-		PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false
-	]
+	'pass' => ''
 ];
 
 Titon\Common\Config::set('db', $db);
 
 // Used by models
 Titon\Common\Registry::factory('Titon\Model\Connection')
-	->addDriver(new Titon\Model\Mysql\Mysql('default', $db));
+	->addDriver(new Titon\Model\Mysql\MysqlDriver('default', $db));
