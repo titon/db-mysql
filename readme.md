@@ -1,4 +1,4 @@
-# Model.Mysql [![Build Status](https://travis-ci.org/titon/Model.png)](https://travis-ci.org/titon/Model) #
+# Model.Mysql v0.1.0 [![Build Status](https://travis-ci.org/titon/Model.png)](https://travis-ci.org/titon/Model) #
 
 Provides MySQL access for the Titon Model package.
 

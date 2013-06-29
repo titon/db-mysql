@@ -1,8 +1,8 @@
 {
 	"name": "titon/model-mysql",
 	"type": "library",
-	"description": "Provides MySQL access for the Titon Model package.",
-	"keywords": ["titon", "model", "driver", "mysql", "pdo"],
+	"description": "Provides MySQL database access for the Titon Model package.",
+	"keywords": ["titon", "model", "driver", "mysql", "pdo", "database"],
 	"homepage": "https://github.com/titon/Model.Mysql",
 	"license": "BSD-2",
 	"authors": [
@@ -17,7 +17,7 @@
 		"titon/model": "*"
 	},
 	"require-dev": {
-		"titon/test": "dev-master",
+		"titon/test": "*",
 		"titon/cache": "*"
 	},
 	"autoload": {
