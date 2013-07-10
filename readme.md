@@ -9,4 +9,4 @@ Provides MySQL access for the Titon Model package.
 ### Requirements ###
 
 * PHP 5.4.0
-	* PDO-MySQL
+	* pdo_mysql
