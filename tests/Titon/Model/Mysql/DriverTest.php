@@ -30,13 +30,13 @@ class DriverTest extends \Titon\Model\Driver\PdoDriverTest {
 	 * Test DSN building.
 	 */
 	public function testGetDsn() {
-		$this->assertEquals('sqlite:', $this->object->getDsn());
+		$this->assertEquals('mysql:dbname=titon_test;host=127.0.0.1;port=3306;charset=utf8', $this->object->getDsn());
 
-		$this->object->config->memory = true;
-		$this->assertEquals('sqlite::memory:', $this->object->getDsn());
+		$this->object->config->port = 1337;
+		$this->assertEquals('mysql:dbname=titon_test;host=127.0.0.1;port=1337;charset=utf8', $this->object->getDsn());
 
-		$this->object->config->path = '/path/to/sql.db';
-		$this->assertEquals('sqlite:/path/to/sql.db', $this->object->getDsn());
+		$this->object->config->socket = '/path/to/unix.sock';
+		$this->assertEquals('mysql:dbname=titon_test;unix_socket=/path/to/unix.sock;charset=utf8', $this->object->getDsn());
 
 		$this->object->config->dsn = 'custom:dsn';
 		$this->assertEquals('custom:dsn', $this->object->getDsn());
