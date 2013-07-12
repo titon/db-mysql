@@ -7,13 +7,13 @@
 
 namespace Titon\Model\Mysql;
 
+use Titon\Common\Config;
 use Titon\Model\Driver\Schema;
 use Titon\Model\Query;
-use Titon\Test\Stub\DriverStub;
 use Titon\Test\Stub\Model\User;
 
 /**
- * Test dialect SQL building.
+ * Test class for dialect SQL building.
  */
 class DialectTest extends \Titon\Model\Driver\DialectTest {
 
@@ -21,12 +21,26 @@ class DialectTest extends \Titon\Model\Driver\DialectTest {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		parent::setUp();
-
-		$this->driver = new DriverStub('default', []);
+		$this->driver = new MysqlDriver('default', Config::get('db'));
 		$this->driver->connect();
 
-		$this->object = new MysqlDialect($this->driver);
+		$this->object = $this->driver->getDialect();
+	}
+
+	/**
+	 * Test create index statement building.
+	 */
+	public function testBuildCreateIndex() {
+		parent::testBuildCreateIndex();
+
+		$query = new Query(Query::CREATE_INDEX, new User());
+		$query->fields('profile_id')->from('users', 'idx')
+			->attribute([
+				'type' => MysqlDialect::FULLTEXT,
+				'using' => MysqlDialect::BTREE
+			]);
+
+		$this->assertRegExp('/CREATE FULLTEXT INDEX (`|\")idx(`|\") ON (`|\")users(`|\") \((`|\")profile_id(`|\")\) USING BTREE/', $this->object->buildCreateIndex($query));
 	}
 
 	/**
@@ -58,11 +72,11 @@ class DialectTest extends \Titon\Model\Driver\DialectTest {
 			'index' => true
 		]);
 
-		$this->assertEquals("CREATE  TABLE IF NOT EXISTS `foobar` (\n`column` INT NOT NULL AUTO_INCREMENT,\n`column2` INT NULL,\nPRIMARY KEY (`column`),\nKEY `column2` (`column2`)\n);", $this->object->buildCreateTable($query));
+		$this->assertEquals("CREATE  TABLE IF NOT EXISTS `foobar` (\n`column` INT NOT NULL AUTO_INCREMENT,\n`column2` INT NULL,\nPRIMARY KEY (`column`)\n);", $this->object->buildCreateTable($query));
 
 		$schema->addOption('engine', 'InnoDB');
 
-		$this->assertEquals("CREATE  TABLE IF NOT EXISTS `foobar` (\n`column` INT NOT NULL AUTO_INCREMENT,\n`column2` INT NULL,\nPRIMARY KEY (`column`),\nKEY `column2` (`column2`)\n) ENGINE=InnoDB;", $this->object->buildCreateTable($query));
+		$this->assertEquals("CREATE  TABLE IF NOT EXISTS `foobar` (\n`column` INT NOT NULL AUTO_INCREMENT,\n`column2` INT NULL,\nPRIMARY KEY (`column`)\n) ENGINE InnoDB;", $this->object->buildCreateTable($query));
 
 		$schema = new Schema('foobar');
 		$schema->addColumn('column', [

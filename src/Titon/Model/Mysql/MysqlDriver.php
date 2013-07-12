@@ -57,6 +57,32 @@ class MysqlDriver extends AbstractPdoDriver {
 	/**
 	 * {@inheritdoc}
 	 */
+	public function getDsn() {
+		if ($dsn = $this->config->dsn) {
+			return $dsn;
+		}
+
+		$params = ['dbname=' . $this->getDatabase()];
+
+		if ($socket = $this->getSocket()) {
+			$params[] = 'unix_socket=' . $socket;
+		} else {
+			$params[] = 'host=' . $this->getHost();
+			$params[] = 'port=' . $this->getPort();
+		}
+
+		if ($encoding = $this->getEncoding()) {
+			$params[] = 'charset=' . $encoding;
+		}
+
+		$dsn = $this->getDriver() . ':' . implode(';', $params);
+
+		return $dsn;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function isEnabled() {
 		return extension_loaded('pdo_mysql');
 	}
