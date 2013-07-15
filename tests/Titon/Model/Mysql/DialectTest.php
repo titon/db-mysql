@@ -8,6 +8,7 @@
 namespace Titon\Model\Mysql;
 
 use Titon\Common\Config;
+use Titon\Model\Driver\Dialect;
 use Titon\Model\Driver\Schema;
 use Titon\Model\Query;
 use Titon\Test\Stub\Model\User;
@@ -37,7 +38,9 @@ class DialectTest extends \Titon\Model\Driver\DialectTest {
 		$query->fields('profile_id')->from('users', 'idx')
 			->attribute([
 				'type' => MysqlDialect::FULLTEXT,
-				'using' => MysqlDialect::BTREE
+				'using' => function(Dialect $dialect) {
+					return sprintf($dialect->getClause(MysqlDialect::USING), $dialect->getKeyword(MysqlDialect::BTREE));
+				}
 			]);
 
 		$this->assertRegExp('/CREATE FULLTEXT INDEX (`|\")idx(`|\") ON (`|\")users(`|\") \((`|\")profile_id(`|\")\) USING BTREE/', $this->object->buildCreateIndex($query));
