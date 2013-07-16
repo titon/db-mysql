@@ -7,7 +7,7 @@
 
 namespace Titon\Model\Mysql;
 
-use Titon\Model\Driver\Dialect\AbstractDialect;
+use Titon\Model\Driver\Dialect\AbstractPdoDialect;
 use Titon\Model\Query;
 
 /**
@@ -15,7 +15,7 @@ use Titon\Model\Query;
  *
  * @package Titon\Model\Mysql
  */
-class MysqlDialect extends AbstractDialect {
+class MysqlDialect extends AbstractPdoDialect {
 
 	const AVG_ROW_LENGTH = 'avgRowLength';
 	const BIG_RESULT = 'sqlBigResult';
@@ -111,7 +111,7 @@ class MysqlDialect extends AbstractDialect {
 		parent::initialize();
 
 		$this->_clauses = array_replace($this->_clauses, [
-			self::USING					=> 'USING %s'
+			self::USING	=> 'USING %s'
 		]);
 
 		$this->_keywords = array_replace($this->_keywords, [
