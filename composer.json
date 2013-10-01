@@ -1,26 +1,26 @@
 {
-	"name": "titon/model-mysql",
-	"type": "library",
-	"description": "Provides MySQL database access for the Titon Model package.",
-	"keywords": ["titon", "model", "driver", "mysql", "pdo", "database"],
-	"homepage": "http://titon.io",
-	"license": "BSD-2",
-	"authors": [
-		{
-			"name": "Miles Johnson",
-			"homepage": "http://milesj.me"
-		}
-	],
-	"require": {
-		"php": ">=5.4.0",
-		"ext-pdo_mysql": "*",
-		"titon/model": "*"
-	},
-	"require-dev": {
-		"titon/test": "*",
-		"titon/cache": "*"
-	},
-	"autoload": {
-		"psr-0": { "Titon\\Model\\Mysql": "src/" }
-	}
+    "name": "titon/model-mysql",
+    "type": "library",
+    "description": "Provides MySQL database access for the Titon Model package.",
+    "keywords": ["titon", "model", "driver", "mysql", "pdo", "database"],
+    "homepage": "http://titon.io",
+    "license": "BSD-2",
+    "authors": [
+        {
+            "name": "Miles Johnson",
+            "homepage": "http://milesj.me"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "ext-pdo_mysql": "*",
+        "titon/model": "dev-master"
+    },
+    "require-dev": {
+        "titon/test": "*",
+        "titon/cache": "*"
+    },
+    "autoload": {
+        "psr-0": { "Titon\\Model\\Mysql": "src/" }
+    }
 }
