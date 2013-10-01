@@ -14,7 +14,7 @@
     "require": {
         "php": ">=5.4.0",
         "ext-pdo_mysql": "*",
-        "titon/model": "dev-master"
+        "titon/model": "*"
     },
     "require-dev": {
         "titon/test": "*",
