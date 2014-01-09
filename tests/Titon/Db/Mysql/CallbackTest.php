@@ -5,12 +5,12 @@
  * @link        http://titon.io
  */
 
-namespace Titon\Model\Mysql;
+namespace Titon\Db\Mysql;
 
-use Titon\Model\Data\AbstractCallbackTest;
+use Titon\Db\Data\AbstractCallbackTest;
 
 /**
- * Test class for model callbacks.
+ * Test class for table callbacks.
  */
 class CallbackTest extends AbstractCallbackTest {
 

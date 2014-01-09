@@ -5,15 +5,15 @@
  * @link        http://titon.io
  */
 
-namespace Titon\Model\Mysql;
+namespace Titon\Db\Mysql;
 
-use Titon\Model\Driver\Dialect\AbstractPdoDialect;
-use Titon\Model\Query;
+use Titon\Db\Driver\Dialect\AbstractPdoDialect;
+use Titon\Db\Query;
 
 /**
  * Inherit the default dialect rules which were based on MySQL.
  *
- * @package Titon\Model\Mysql
+ * @package Titon\Db\Mysql
  */
 class MysqlDialect extends AbstractPdoDialect {
 

@@ -16,9 +16,9 @@ if (!file_exists(VENDOR_DIR . '/autoload.php')) {
 }
 
 $loader = require VENDOR_DIR . '/autoload.php';
-$loader->add('Titon\\Model\\Mysql', TEST_DIR);
-$loader->add('Titon\\Model\\Data', VENDOR_DIR . '/titon/model/tests');
-$loader->add('Titon\\Model\\Driver', VENDOR_DIR . '/titon/model/tests');
+$loader->add('Titon\\Db\\Mysql', TEST_DIR);
+$loader->add('Titon\\Db\\Data', VENDOR_DIR . '/titon/db/tests');
+$loader->add('Titon\\Db\\Driver', VENDOR_DIR . '/titon/db/tests');
 
 // Define database credentials
 $db = [
@@ -30,6 +30,6 @@ $db = [
 
 Titon\Common\Config::set('db', $db);
 
-// Used by models
-Titon\Common\Registry::factory('Titon\Model\Connection')
-    ->addDriver(new Titon\Model\Mysql\MysqlDriver('default', $db));
+// Used by tables
+Titon\Common\Registry::factory('Titon\Db\Connection')
+    ->addDriver(new Titon\Db\Mysql\MysqlDriver('default', $db));

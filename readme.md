@@ -1,10 +1,10 @@
-# Model.MySQL v0.2.6 [![Build Status](https://travis-ci.org/titon/model-mysql.png)](https://travis-ci.org/titon/model-mysql) #
+# DB\MySQL v0.2.6 [![Build Status](https://travis-ci.org/titon/db-mysql.png)](https://travis-ci.org/titon/db-mysql) #
 
-Provides MySQL access for the Titon Model package.
+Provides MySQL access for the Titon DB package.
 
 ### Dependencies ###
 
-* `Model`
+* `DB`
 
 ### Requirements ###
 

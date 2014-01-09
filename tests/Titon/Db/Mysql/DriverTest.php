@@ -5,16 +5,15 @@
  * @link        http://titon.io
  */
 
-namespace Titon\Model\Sqlite;
+namespace Titon\Db\Mysql;
 
 use Titon\Common\Config;
-use Titon\Model\Mysql\MysqlDriver;
-use Titon\Test\Stub\Model\User;
+use Titon\Test\Stub\Table\User;
 
 /**
  * Test class for driver specific testing.
  */
-class DriverTest extends \Titon\Model\Driver\PdoDriverTest {
+class DriverTest extends \Titon\Db\Driver\PdoDriverTest {
 
     /**
      * This method is called before a test is executed.
@@ -23,7 +22,7 @@ class DriverTest extends \Titon\Model\Driver\PdoDriverTest {
         $this->object = new MysqlDriver('default', Config::get('db'));
         $this->object->connect();
 
-        $this->model = new User();
+        $this->table = new User();
     }
 
     /**

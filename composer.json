@@ -1,8 +1,8 @@
 {
-    "name": "titon/model-mysql",
+    "name": "titon/db-mysql",
     "type": "library",
-    "description": "Provides MySQL database access for the Titon Model package.",
-    "keywords": ["titon", "model", "driver", "mysql", "pdo", "database"],
+    "description": "Provides MySQL database access for the Titon database package.",
+    "keywords": ["titon", "database", "driver", "mysql", "pdo"],
     "homepage": "http://titon.io",
     "license": "BSD-2",
     "authors": [
@@ -14,13 +14,13 @@
     "require": {
         "php": ">=5.4.0",
         "ext-pdo_mysql": "*",
-        "titon/model": "*"
+        "titon/db": "*"
     },
     "require-dev": {
         "titon/test": "*",
         "titon/cache": "*"
     },
     "autoload": {
-        "psr-0": { "Titon\\Model\\Mysql": "src/" }
+        "psr-0": { "Titon\\Db\\Mysql": "src/" }
     }
 }

@@ -5,13 +5,13 @@
  * @link        http://titon.io
  */
 
-namespace Titon\Model\Mysql;
+namespace Titon\Db\Mysql;
 
-use Titon\Model\Data\AbstractDeleteTest;
+use Titon\Db\Data\AbstractUpdateTest;
 
 /**
- * Test class for database record deleting.
+ * Test class for database updating.
  */
-class DeleteTest extends AbstractDeleteTest {
+class UpdateTest extends AbstractUpdateTest {
 
 }

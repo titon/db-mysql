@@ -5,16 +5,16 @@
  * @link        http://titon.io
  */
 
-namespace Titon\Model\Mysql;
+namespace Titon\Db\Mysql;
 
-use Titon\Model\Driver\AbstractPdoDriver;
-use Titon\Model\Driver\Type;
+use Titon\Db\Driver\AbstractPdoDriver;
+use Titon\Db\Driver\Type;
 use \PDO;
 
 /**
  * A driver that represents the MySQL database and uses PDO.
  *
- * @package Titon\Model\Mysql
+ * @package Titon\Db\Mysql
  */
 class MysqlDriver extends AbstractPdoDriver {
 

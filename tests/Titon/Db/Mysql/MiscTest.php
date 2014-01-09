@@ -5,9 +5,9 @@
  * @link        http://titon.io
  */
 
-namespace Titon\Model\Mysql;
+namespace Titon\Db\Mysql;
 
-use Titon\Model\Data\AbstractMiscTest;
+use Titon\Db\Data\AbstractMiscTest;
 
 /**
  * Test class for misc database functionality.

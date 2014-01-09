@@ -5,13 +5,13 @@
  * @link        http://titon.io
  */
 
-namespace Titon\Model\Mysql;
+namespace Titon\Db\Mysql;
 
-use Titon\Model\Data\AbstractUpsertTest;
+use Titon\Db\Data\AbstractReadTest;
 
 /**
- * Test class for database upserting.
+ * Test class for database reading.
  */
-class UpsertTest extends AbstractUpsertTest {
+class ReadTest extends AbstractReadTest {
 
 }

@@ -5,9 +5,9 @@
  * @link        http://titon.io
  */
 
-namespace Titon\Model\Mysql;
+namespace Titon\Db\Mysql;
 
-use Titon\Model\Data\AbstractCreateTest;
+use Titon\Db\Data\AbstractCreateTest;
 
 /**
  * Test class for database inserting.
