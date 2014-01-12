@@ -15,6 +15,8 @@ use Titon\Test\Stub\Table\User;
 
 /**
  * Test class for dialect SQL building.
+ *
+ * @property \Titon\Db\Mysql\MysqlDialect $object
  */
 class DialectTest extends \Titon\Db\Driver\DialectTest {
 
