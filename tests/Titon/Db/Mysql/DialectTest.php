@@ -11,7 +11,7 @@ use Titon\Common\Config;
 use Titon\Db\Driver\Dialect;
 use Titon\Db\Driver\Schema;
 use Titon\Db\Query;
-use Titon\Test\Stub\Table\User;
+use Titon\Test\Stub\Repository\User;
 
 /**
  * Test class for dialect SQL building.

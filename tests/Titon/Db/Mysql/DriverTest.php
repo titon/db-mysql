@@ -8,7 +8,7 @@
 namespace Titon\Db\Mysql;
 
 use Titon\Common\Config;
-use Titon\Test\Stub\Table\User;
+use Titon\Test\Stub\Repository\User;
 
 /**
  * Test class for driver specific testing.
