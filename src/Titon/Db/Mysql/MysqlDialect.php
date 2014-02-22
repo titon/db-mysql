@@ -57,7 +57,7 @@ class MysqlDialect extends AbstractPdoDialect {
      */
     protected $_statements = [
         Query::INSERT           => 'INSERT {a.priority} {a.ignore} INTO {table} {fields} VALUES {values}',
-        Query::SELECT           => 'SELECT {a.distinct} {a.priority} {a.optimize} {a.cache} {fields} FROM {table} {joins} {where} {groupBy} {having} {orderBy} {limit}',
+        Query::SELECT           => 'SELECT {a.distinct} {a.priority} {a.optimize} {a.cache} {fields} FROM {table} {joins} {where} {groupBy} {having} {unions} {orderBy} {limit}',
         Query::UPDATE           => 'UPDATE {a.priority} {a.ignore} {table} {joins} SET {fields} {where} {orderBy} {limit}',
         Query::DELETE           => 'DELETE {a.priority} {a.quick} {a.ignore} FROM {table} {joins} {where} {orderBy} {limit}',
         Query::TRUNCATE         => 'TRUNCATE {table}',

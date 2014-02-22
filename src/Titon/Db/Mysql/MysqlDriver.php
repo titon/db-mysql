@@ -34,9 +34,9 @@ class MysqlDriver extends AbstractPdoDriver {
     public function initialize() {
         $this->setDialect(new MysqlDialect($this));
 
-        $flags = $this->config->flags;
+        $flags = $this->getConfig('flags');
 
-        if ($timezone = $this->config->timezone) {
+        if ($timezone = $this->getConfig('timezone')) {
             if ($timezone === 'UTC') {
                 $timezone = '+00:00';
             }
@@ -44,7 +44,7 @@ class MysqlDriver extends AbstractPdoDriver {
             $flags[PDO::MYSQL_ATTR_INIT_COMMAND] = sprintf('SET time_zone = "%s";', $timezone);
         }
 
-        $this->config->flags = $flags;
+        $this->setConfig('flags', $flags);
     }
 
     /**
@@ -58,7 +58,7 @@ class MysqlDriver extends AbstractPdoDriver {
      * {@inheritdoc}
      */
     public function getDsn() {
-        if ($dsn = $this->config->dsn) {
+        if ($dsn = $this->getConfig('dsn')) {
             return $dsn;
         }
 

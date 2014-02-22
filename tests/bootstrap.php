@@ -19,6 +19,7 @@ $loader = require VENDOR_DIR . '/autoload.php';
 $loader->add('Titon\\Db\\Mysql', TEST_DIR);
 $loader->add('Titon\\Db\\Data', VENDOR_DIR . '/titon/db/tests');
 $loader->add('Titon\\Db\\Driver', VENDOR_DIR . '/titon/db/tests');
+$loader->add('Titon\\Db\\Behavior', VENDOR_DIR . '/titon/db/tests');
 
 // Define database credentials
 $db = [
@@ -31,5 +32,5 @@ $db = [
 Titon\Common\Config::set('db', $db);
 
 // Used by tables
-Titon\Common\Registry::factory('Titon\Db\Connection')
-    ->addDriver(new Titon\Db\Mysql\MysqlDriver('default', $db));
+Titon\Db\Database::registry()
+    ->addDriver('default', new Titon\Db\Mysql\MysqlDriver($db));
