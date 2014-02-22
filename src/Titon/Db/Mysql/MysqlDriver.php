@@ -12,7 +12,7 @@ use Titon\Db\Driver\Type;
 use \PDO;
 
 /**
- * A driver that represents the MySQL database and uses PDO.
+ * A driver that represents the MySQL database.
  *
  * @package Titon\Db\Mysql
  */
@@ -85,6 +85,13 @@ class MysqlDriver extends AbstractPdoDriver {
      */
     public function isEnabled() {
         return extension_loaded('pdo_mysql');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function newQuery($string) {
+        return new MysqlQuery($string);
     }
 
 }

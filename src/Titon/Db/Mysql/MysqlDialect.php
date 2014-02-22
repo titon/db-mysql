@@ -30,6 +30,7 @@ class MysqlDialect extends AbstractPdoDialect {
     const DELAYED = 'delayed';
     const DELAY_KEY_WRITE = 'delayKeyWrite';
     const DISTINCT_ROW = 'distinctRow';
+    const FOR_UPDATE_LOCK = 'forUpdateLock';
     const FULLTEXT = 'fulltext';
     const HASH = 'hash';
     const HIGH_PRIORITY = 'highPriority';
@@ -43,6 +44,7 @@ class MysqlDialect extends AbstractPdoDialect {
     const PACK_KEYS = 'packKeys';
     const QUICK = 'quick';
     const ROW_FORMAT = 'rowFormat';
+    const SHARED_LOCK = 'sharedLock';
     const SMALL_RESULT = 'sqlSmallResult';
     const SPATIAL = 'spatial';
     const STATS_AUTO_RECALC = 'statsAutoRecalc';
@@ -57,7 +59,7 @@ class MysqlDialect extends AbstractPdoDialect {
      */
     protected $_statements = [
         Query::INSERT           => 'INSERT {a.priority} {a.ignore} INTO {table} {fields} VALUES {values}',
-        Query::SELECT           => 'SELECT {a.distinct} {a.priority} {a.optimize} {a.cache} {fields} FROM {table} {joins} {where} {groupBy} {having} {unions} {orderBy} {limit}',
+        Query::SELECT           => 'SELECT {a.distinct} {a.priority} {a.optimize} {a.cache} {fields} FROM {table} {joins} {where} {groupBy} {having} {unions} {orderBy} {limit} {a.lock}',
         Query::UPDATE           => 'UPDATE {a.priority} {a.ignore} {table} {joins} SET {fields} {where} {orderBy} {limit}',
         Query::DELETE           => 'DELETE {a.priority} {a.quick} {a.ignore} FROM {table} {joins} {where} {orderBy} {limit}',
         Query::TRUNCATE         => 'TRUNCATE {table}',
@@ -81,7 +83,8 @@ class MysqlDialect extends AbstractPdoDialect {
             'distinct' => false,
             'priority' => '',
             'optimize' => '',
-            'cache' => ''
+            'cache' => '',
+            'lock' => ''
         ],
         Query::UPDATE => [
             'priority' => '',
@@ -127,6 +130,7 @@ class MysqlDialect extends AbstractPdoDialect {
             self::DELAYED               => 'DELAYED',
             self::DELAY_KEY_WRITE       => 'DELAY_KEY_WRITE',
             self::DISTINCT_ROW          => 'DISTINCTROW',
+            self::FOR_UPDATE_LOCK       => 'FOR UPDATE',
             self::FULLTEXT              => 'FULLTEXT',
             self::HASH                  => 'HASH',
             self::HIGH_PRIORITY         => 'HIGH_PRIORITY',
@@ -140,6 +144,7 @@ class MysqlDialect extends AbstractPdoDialect {
             self::PACK_KEYS             => 'PACK_KEYS',
             self::QUICK                 => 'QUICK',
             self::ROW_FORMAT            => 'ROW_FORMAT',
+            self::SHARED_LOCK           => 'LOCK IN SHARE MODE',
             self::SMALL_RESULT          => 'SQL_SMALL_RESULT',
             self::SPATIAL               => 'SPATIAL',
             self::STATS_AUTO_RECALC     => 'STATS_AUTO_RECALC',
