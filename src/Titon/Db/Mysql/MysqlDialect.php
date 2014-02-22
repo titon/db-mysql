@@ -22,7 +22,6 @@ class MysqlDialect extends AbstractPdoDialect {
     const BUFFER_RESULT = 'sqlBufferResult';
     const BTREE = 'btree';
     const CACHE = 'sqlCache';
-    const CASCADE = 'cascade';
     const CONNECTION = 'connection';
     const DATA_DIRECTORY = 'dataDirectory';
     const DEFAULT_CHARACTER_SET = 'defaultCharacterSet';
