@@ -114,6 +114,7 @@ class MysqlDialect extends AbstractPdoDialect {
         parent::initialize();
 
         $this->_clauses = array_replace($this->_clauses, [
+            self::UNION => 'UNION {a.union} (%s)',
             self::USING => 'USING %s'
         ]);
 
@@ -151,6 +152,33 @@ class MysqlDialect extends AbstractPdoDialect {
             self::STATS_PERSISTENT      => 'STATS_PERSISTENT',
             self::UNIQUE                => 'UNIQUE'
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildSelect(Query $query) {
+        $statement = parent::buildSelect($query);
+
+        // Primary select needs to be wrapped in parenthesis, so add a (
+        // The closing ) is added by formatUnions()
+        if ($query->getUnions()) {
+            $statement = '(' . $statement;
+        }
+
+        return $statement;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function formatUnions(array $queries) {
+        if ($queries) {
+            // Return a ) as we need to wrap the primary select query
+            return ') ' . parent::formatUnions($queries);
+        }
+
+        return '';
     }
 
 }
