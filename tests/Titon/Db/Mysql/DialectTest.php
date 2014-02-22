@@ -24,7 +24,7 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
      * This method is called before a test is executed.
      */
     protected function setUp() {
-        $this->driver = new MysqlDriver('default', Config::get('db'));
+        $this->driver = new MysqlDriver(Config::get('db'));
         $this->driver->connect();
 
         $this->object = $this->driver->getDialect();
@@ -176,6 +176,19 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
 
         $query->attribute('priority', 'lowPriority');
         $this->assertRegExp('/UPDATE LOW_PRIORITY IGNORE `foobar`\s+SET `username` = \?;/', $this->object->buildUpdate($query));
+    }
+
+    /**
+     * Test select locking types.
+     */
+    public function testSelectLocking() {
+        $query = new MysqlQuery(Query::SELECT, new User());
+        $query->from('users')->where('name', 'like', '%miles%')->sharedLock();
+
+        $this->assertRegExp('/SELECT\s+\* FROM\s+`users`\s+WHERE `name` LIKE \?\s+LOCK IN SHARE MODE;/', $this->object->buildSelect($query));
+
+        $query->lockForUpdate();
+        $this->assertRegExp('/SELECT\s+\* FROM\s+`users`\s+WHERE `name` LIKE \?\s+FOR UPDATE;/', $this->object->buildSelect($query));
     }
 
 }
