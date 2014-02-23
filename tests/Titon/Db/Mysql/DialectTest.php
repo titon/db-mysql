@@ -200,22 +200,22 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
     }
 
     /**
-     * Test union building.
+     * Test compound query building.
      */
-    public function testFormatUnions() {
+    public function testFormatCompounds() {
         $query = new Query(Query::INSERT, new User());
 
         $query->union($query->subQuery('id')->from('u1'));
-        $this->assertRegExp('/\) UNION\s+\(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u1(`|\")?\)/', $this->object->formatUnions($query->getUnions()));
+        $this->assertRegExp('/\) UNION\s+\(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u1(`|\")?\)/', $this->object->formatCompounds($query->getCompounds()));
 
         // all
         $query->union($query->subQuery('id')->from('u2'), 'all');
-        $this->assertRegExp('/\) UNION\s+\(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u1(`|\")?\) UNION ALL \(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u2(`|\")?\)/', $this->object->formatUnions($query->getUnions()));
+        $this->assertRegExp('/\) UNION\s+\(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u1(`|\")?\) UNION ALL \(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u2(`|\")?\)/', $this->object->formatCompounds($query->getCompounds()));
 
         // distinct
         $query = new Query(Query::INSERT, new User());
         $query->union($query->subQuery('id')->from('u1'), 'distinct');
-        $this->assertRegExp('/\) UNION DISTINCT \(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u1(`|\")?\)/', $this->object->formatUnions($query->getUnions()));
+        $this->assertRegExp('/\) UNION DISTINCT \(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u1(`|\")?\)/', $this->object->formatCompounds($query->getCompounds()));
     }
 
     /**

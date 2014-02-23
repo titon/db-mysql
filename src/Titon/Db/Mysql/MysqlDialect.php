@@ -58,7 +58,7 @@ class MysqlDialect extends AbstractPdoDialect {
      */
     protected $_statements = [
         Query::INSERT           => 'INSERT {a.priority} {a.ignore} INTO {table} {fields} VALUES {values}',
-        Query::SELECT           => 'SELECT {a.distinct} {a.priority} {a.optimize} {a.cache} {fields} FROM {table} {joins} {where} {groupBy} {having} {unions} {orderBy} {limit} {a.lock}',
+        Query::SELECT           => 'SELECT {a.distinct} {a.priority} {a.optimize} {a.cache} {fields} FROM {table} {joins} {where} {groupBy} {having} {compounds} {orderBy} {limit} {a.lock}',
         Query::UPDATE           => 'UPDATE {a.priority} {a.ignore} {table} {joins} SET {fields} {where} {orderBy} {limit}',
         Query::DELETE           => 'DELETE {a.priority} {a.quick} {a.ignore} FROM {table} {joins} {where} {orderBy} {limit}',
         Query::TRUNCATE         => 'TRUNCATE {table}',
@@ -113,7 +113,7 @@ class MysqlDialect extends AbstractPdoDialect {
         parent::initialize();
 
         $this->_clauses = array_replace($this->_clauses, [
-            self::UNION => 'UNION {a.union} (%s)',
+            self::UNION => 'UNION {a.flag} (%s)',
             self::USING => 'USING %s'
         ]);
 
@@ -161,7 +161,7 @@ class MysqlDialect extends AbstractPdoDialect {
 
         // Primary select needs to be wrapped in parenthesis, so add a (
         // The closing ) is added by formatUnions()
-        if ($query->getUnions()) {
+        if ($query->getCompounds()) {
             $statement = '(' . $statement;
         }
 
@@ -171,10 +171,10 @@ class MysqlDialect extends AbstractPdoDialect {
     /**
      * {@inheritdoc}
      */
-    public function formatUnions(array $queries) {
+    public function formatCompounds(array $queries) {
         if ($queries) {
             // Return a ) as we need to wrap the primary select query
-            return ') ' . parent::formatUnions($queries);
+            return ') ' . parent::formatCompounds($queries);
         }
 
         return '';
