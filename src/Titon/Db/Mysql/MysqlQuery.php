@@ -17,25 +17,21 @@ use Titon\Db\Query;
 class MysqlQuery extends Query {
 
     /**
-     * Lock rows and indices during the current transaction.
+     * Lock all rows using a shared lock instead of exclusive.
+     *
+     * @return $this
+     */
+    public function lockForShare() {
+        return $this->attribute('lock', MysqlDialect::SHARED_LOCK);
+    }
+
+    /**
+     * Lock all rows returned from a select as if they were locked for update.
      *
      * @return $this
      */
     public function lockForUpdate() {
-        $this->attribute('lock', MysqlDialect::FOR_UPDATE_LOCK);
-
-        return $this;
-    }
-
-    /**
-     * Apply a shared lock on rows being read during the current transaction.
-     *
-     * @return $this
-     */
-    public function sharedLock() {
-        $this->attribute('lock', MysqlDialect::SHARED_LOCK);
-
-        return $this;
+        return $this->attribute('lock', MysqlDialect::FOR_UPDATE_LOCK);
     }
 
 }

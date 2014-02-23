@@ -223,7 +223,7 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
      */
     public function testSelectLocking() {
         $query = new MysqlQuery(Query::SELECT, new User());
-        $query->from('users')->where('name', 'like', '%miles%')->sharedLock();
+        $query->from('users')->where('name', 'like', '%miles%')->lockForShare();
 
         $this->assertRegExp('/SELECT\s+\* FROM\s+`users`\s+WHERE `name` LIKE \?\s+LOCK IN SHARE MODE;/', $this->object->buildSelect($query));
 
