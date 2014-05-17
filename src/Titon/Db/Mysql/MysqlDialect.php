@@ -8,6 +8,7 @@
 namespace Titon\Db\Mysql;
 
 use Titon\Db\Driver\Dialect\AbstractPdoDialect;
+use Titon\Db\Driver\Dialect\Statement;
 use Titon\Db\Query;
 
 /**
@@ -52,72 +53,17 @@ class MysqlDialect extends AbstractPdoDialect {
     const USING = 'using';
 
     /**
-     * List of full SQL statements.
-     *
-     * @type array
-     */
-    protected $_statements = [
-        Query::INSERT           => 'INSERT {a.priority} {a.ignore} INTO {table} {fields} VALUES {values}',
-        Query::SELECT           => 'SELECT {a.distinct} {a.priority} {a.optimize} {a.cache} {fields} FROM {table} {joins} {where} {groupBy} {having} {compounds} {orderBy} {limit} {a.lock}',
-        Query::UPDATE           => 'UPDATE {a.priority} {a.ignore} {table} {joins} SET {fields} {where} {orderBy} {limit}',
-        Query::DELETE           => 'DELETE {a.priority} {a.quick} {a.ignore} FROM {table} {joins} {where} {orderBy} {limit}',
-        Query::TRUNCATE         => 'TRUNCATE {table}',
-        Query::CREATE_TABLE     => "CREATE {a.temporary} TABLE IF NOT EXISTS {table} (\n{columns}{keys}\n) {options}",
-        Query::CREATE_INDEX     => 'CREATE {a.type} INDEX {index} ON {table} ({fields}) {a.using}',
-        Query::DROP_TABLE       => 'DROP {a.temporary} TABLE IF EXISTS {table}',
-        Query::DROP_INDEX       => 'DROP INDEX {index} ON {table}',
-    ];
-
-    /**
-     * Available attributes for each query type.
-     *
-     * @type array
-     */
-    protected $_attributes = [
-        Query::INSERT => [
-            'priority' => '',
-            'ignore' => false
-        ],
-        Query::SELECT => [
-            'distinct' => false,
-            'priority' => '',
-            'optimize' => '',
-            'cache' => '',
-            'lock' => ''
-        ],
-        Query::UPDATE => [
-            'priority' => '',
-            'ignore' => false
-        ],
-        Query::DELETE => [
-            'priority' => '',
-            'quick' => false,
-            'ignore' => false
-        ],
-        Query::CREATE_TABLE => [
-            'temporary' => false
-        ],
-        Query::CREATE_INDEX => [
-            'type' => '',
-            'using' => ''
-        ],
-        Query::DROP_TABLE => [
-            'temporary' => false
-        ]
-    ];
-
-    /**
      * Modify clauses and keywords.
      */
     public function initialize() {
         parent::initialize();
 
-        $this->_clauses = array_replace($this->_clauses, [
-            self::UNION => 'UNION {a.flag} (%s)',
+        $this->addClauses([
+            self::UNION => 'UNION {flag} (%s)',
             self::USING => 'USING %s'
         ]);
 
-        $this->_keywords = array_replace($this->_keywords, [
+        $this->addKeywords([
             self::AVG_ROW_LENGTH        => 'AVG_ROW_LENGTH',
             self::BIG_RESULT            => 'SQL_BIG_RESULT',
             self::BUFFER_RESULT         => 'SQL_BUFFER_RESULT',
@@ -151,6 +97,18 @@ class MysqlDialect extends AbstractPdoDialect {
             self::STATS_PERSISTENT      => 'STATS_PERSISTENT',
             self::UNIQUE                => 'UNIQUE'
         ]);
+
+        $this->addStatements([
+            Query::INSERT        => new Statement('INSERT {priority} {ignore} INTO {table} {fields} VALUES {values}'),
+            Query::SELECT        => new Statement('SELECT {distinct} {priority} {optimize} {cache} {fields} FROM {table} {joins} {where} {groupBy} {having} {compounds} {orderBy} {limit} {lock}'),
+            Query::UPDATE        => new Statement('UPDATE {priority} {ignore} {table} {joins} SET {fields} {where} {orderBy} {limit}'),
+            Query::DELETE        => new Statement('DELETE {priority} {quick} {ignore} FROM {table} {joins} {where} {orderBy} {limit}'),
+            Query::TRUNCATE      => new Statement('TRUNCATE {table}'),
+            Query::CREATE_TABLE  => new Statement("CREATE {temporary} TABLE IF NOT EXISTS {table} (\n{columns}{keys}\n) {options}"),
+            Query::CREATE_INDEX  => new Statement('CREATE {type} INDEX {index} ON {table} ({fields}) {using}'),
+            Query::DROP_TABLE    => new Statement('DROP {temporary} TABLE IF EXISTS {table}'),
+            Query::DROP_INDEX    => new Statement('DROP INDEX {index} ON {table}')
+        ]);
     }
 
     /**
@@ -160,7 +118,7 @@ class MysqlDialect extends AbstractPdoDialect {
         $statement = parent::buildSelect($query);
 
         // Primary select needs to be wrapped in parenthesis, so add a (
-        // The closing ) is added by formatUnions()
+        // The closing ) is added by formatCompounds()
         if ($query->getCompounds()) {
             $statement = '(' . $statement;
         }

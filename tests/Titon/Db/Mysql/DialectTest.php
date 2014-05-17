@@ -1,10 +1,4 @@
 <?php
-/**
- * @copyright   2010-2013, The Titon Project
- * @license     http://opensource.org/licenses/bsd-license.php
- * @link        http://titon.io
- */
-
 namespace Titon\Db\Mysql;
 
 use Titon\Common\Config;
@@ -14,15 +8,10 @@ use Titon\Db\Query;
 use Titon\Test\Stub\Repository\User;
 
 /**
- * Test class for dialect SQL building.
- *
  * @property \Titon\Db\Mysql\MysqlDialect $object
  */
 class DialectTest extends \Titon\Db\Driver\DialectTest {
 
-    /**
-     * This method is called before a test is executed.
-     */
     protected function setUp() {
         $this->driver = new MysqlDriver(Config::get('db'));
         $this->driver->connect();
@@ -30,9 +19,6 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
         $this->object = $this->driver->getDialect();
     }
 
-    /**
-     * Test create index statement building.
-     */
     public function testBuildCreateIndex() {
         parent::testBuildCreateIndex();
 
@@ -48,11 +34,8 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
         $this->assertRegExp('/CREATE FULLTEXT INDEX (`|\")idx(`|\") ON (`|\")users(`|\") \((`|\")profile_id(`|\")\) USING BTREE/', $this->object->buildCreateIndex($query));
     }
 
-    /**
-     * Test create table statement creation.
-     */
     public function testBuildCreateTable() {
-            $schema = new Schema('foobar');
+        $schema = new Schema('foobar');
         $schema->addColumn('column', [
             'type' => 'int',
             'ai' => true
@@ -93,42 +76,30 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
         $query->schema($schema)->attribute('temporary', true);
 
         $this->assertEquals("CREATE TEMPORARY TABLE IF NOT EXISTS `foobar` (\n`column` INT NOT NULL AUTO_INCREMENT\n);", $this->object->buildCreateTable($query));
-
     }
 
-    /**
-     * Test delete statement creation.
-     */
-    public function testBuildDelete() {
-        parent::testBuildDelete();
-
+    public function testBuildDeleteQuick() {
         $query = new Query(Query::DELETE, new User());
         $query->from('foobar')->attribute('quick', true);
 
         $this->assertRegExp('/DELETE\s+QUICK\s+FROM `foobar`;/', $this->object->buildDelete($query));
-
-        $query->attribute('ignore', true);
-        $this->assertRegExp('/DELETE\s+QUICK\s+IGNORE\s+FROM `foobar`;/', $this->object->buildDelete($query));
     }
 
-    /**
-     * Test drop table statement creation.
-     */
-    public function testBuildDropTable() {
-        parent::testBuildDropTable();
+    public function testBuildDeleteIgnore() {
+        $query = new Query(Query::DELETE, new User());
+        $query->from('foobar')->attribute('ignore', true);
 
+        $this->assertRegExp('/DELETE\s+IGNORE\s+FROM `foobar`;/', $this->object->buildDelete($query));
+    }
+
+    public function testBuildDropTableTemporary() {
         $query = new Query(Query::DROP_TABLE, new User());
         $query->from('foobar')->attribute('temporary', true);
 
         $this->assertRegExp('/DROP TEMPORARY TABLE IF EXISTS `foobar`;/', $this->object->buildDropTable($query));
     }
 
-    /**
-     * Test insert statement creation.
-     */
-    public function testBuildInsert() {
-        parent::testBuildInsert();
-
+    public function testBuildInsertIgnore() {
         $query = new Query(Query::INSERT, new User());
         $query->from('foobar')->fields([
             'email' => 'email@domain.com',
@@ -137,17 +108,20 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
 
         $query->attribute('ignore', true);
         $this->assertRegExp('/INSERT\s+IGNORE\s+INTO `foobar` \(`email`, `website`\) VALUES \(\?, \?\);/', $this->object->buildInsert($query));
-
-        $query->attribute('priority', 'highPriority');
-        $this->assertRegExp('/INSERT HIGH_PRIORITY IGNORE INTO `foobar` \(`email`, `website`\) VALUES \(\?, \?\);/', $this->object->buildInsert($query));
     }
 
-    /**
-     * Test select statement creation.
-     */
-    public function testBuildSelect() {
-        parent::testBuildSelect();
+    public function testBuildInsertPriority() {
+        $query = new Query(Query::INSERT, new User());
+        $query->from('foobar')->fields([
+            'email' => 'email@domain.com',
+            'website' => 'http://titon.io'
+        ]);
 
+        $query->attribute('priority', 'highPriority');
+        $this->assertRegExp('/INSERT HIGH_PRIORITY  INTO `foobar` \(`email`, `website`\) VALUES \(\?, \?\);/', $this->object->buildInsert($query));
+    }
+
+    public function testBuildSelectDistinct() {
         $query = new Query(Query::SELECT, new User());
         $query->from('foobar')->attribute('distinct', true);
 
@@ -155,17 +129,22 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
 
         $query->attribute('distinct', 'all');
         $this->assertRegExp('/SELECT\s+ALL\s+\* FROM `foobar`;/', $this->object->buildSelect($query));
-
-        $query->attribute('optimize', 'sqlBufferResult');
-        $this->assertRegExp('/SELECT\s+ALL\s+SQL_BUFFER_RESULT\s+\* FROM `foobar`;/', $this->object->buildSelect($query));
-
-        $query->attribute('cache', 'sqlCache');
-        $this->assertRegExp('/SELECT\s+ALL\s+SQL_BUFFER_RESULT\s+SQL_CACHE\s+\* FROM `foobar`;/', $this->object->buildSelect($query));
     }
 
-    /**
-     * Test union building and wrapping.
-     */
+    public function testBuildSelectOptimize() {
+        $query = new Query(Query::SELECT, new User());
+        $query->from('foobar')->attribute('optimize', 'sqlBufferResult');
+
+        $this->assertRegExp('/SELECT\s+SQL_BUFFER_RESULT\s+\* FROM `foobar`;/', $this->object->buildSelect($query));
+    }
+
+    public function testBuildSelectCache() {
+        $query = new Query(Query::SELECT, new User());
+        $query->from('foobar')->attribute('cache', 'sqlCache');
+
+        $this->assertRegExp('/SELECT\s+SQL_CACHE\s+\* FROM `foobar`;/', $this->object->buildSelect($query));
+    }
+
     public function testBuildSelectUnions() {
         $user = new User();
         $query = $user->select('id');
@@ -184,24 +163,31 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
         $this->assertRegExp('/\(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?users(`|\")?\s+\) UNION  \(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u1(`|\")?\) UNION ALL \(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u2(`|\")?\) ORDER BY (`|\")?id(`|\")? DESC LIMIT 10;/', $this->object->buildSelect($query));
     }
 
-    /**
-     * Test update statement creation.
-     */
-    public function testBuildUpdate() {
-        parent::testBuildUpdate();
+    public function testBuildSelectLocking() {
+        $query = new MysqlQuery(Query::SELECT, new User());
+        $query->from('users')->where('name', 'like', '%miles%');
 
+        $query->lockForShare();
+        $this->assertRegExp('/SELECT\s+\* FROM\s+`users`\s+WHERE `name` LIKE \?\s+LOCK IN SHARE MODE;/', $this->object->buildSelect($query));
+
+        $query->lockForUpdate();
+        $this->assertRegExp('/SELECT\s+\* FROM\s+`users`\s+WHERE `name` LIKE \?\s+FOR UPDATE;/', $this->object->buildSelect($query));
+    }
+
+    public function testBuildUpdateIgnore() {
         $query = new Query(Query::UPDATE, new User());
         $query->from('foobar')->fields(['username' => 'miles'])->attribute('ignore', true);
 
         $this->assertRegExp('/UPDATE\s+IGNORE\s+`foobar`\s+SET `username` = \?;/', $this->object->buildUpdate($query));
-
-        $query->attribute('priority', 'lowPriority');
-        $this->assertRegExp('/UPDATE LOW_PRIORITY IGNORE `foobar`\s+SET `username` = \?;/', $this->object->buildUpdate($query));
     }
 
-    /**
-     * Test compound query building.
-     */
+    public function testBuildUpdatePriority() {
+        $query = new Query(Query::UPDATE, new User());
+        $query->from('foobar')->fields(['username' => 'miles'])->attribute('priority', 'lowPriority');
+
+        $this->assertRegExp('/UPDATE LOW_PRIORITY  `foobar`\s+SET `username` = \?;/', $this->object->buildUpdate($query));
+    }
+
     public function testFormatCompounds() {
         $query = new Query(Query::INSERT, new User());
 
@@ -218,17 +204,15 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
         $this->assertRegExp('/\) UNION DISTINCT \(SELECT\s+(`|\")?id(`|\")? FROM (`|\")?u1(`|\")?\)/', $this->object->formatCompounds($query->getCompounds()));
     }
 
-    /**
-     * Test select locking types.
-     */
-    public function testSelectLocking() {
-        $query = new MysqlQuery(Query::SELECT, new User());
-        $query->from('users')->where('name', 'like', '%miles%')->lockForShare();
+    public function testGetStatement() {
+        $this->assertEquals(new Dialect\Statement('INSERT {priority} {ignore} INTO {table} {fields} VALUES {values}'), $this->object->getStatement('insert'));
+    }
 
-        $this->assertRegExp('/SELECT\s+\* FROM\s+`users`\s+WHERE `name` LIKE \?\s+LOCK IN SHARE MODE;/', $this->object->buildSelect($query));
-
-        $query->lockForUpdate();
-        $this->assertRegExp('/SELECT\s+\* FROM\s+`users`\s+WHERE `name` LIKE \?\s+FOR UPDATE;/', $this->object->buildSelect($query));
+    public function testRenderStatement() {
+        $this->assertEquals('SELECT     * FROM tableName;', $this->object->renderStatement(Query::SELECT, [
+            'table' => 'tableName',
+            'fields' => '*'
+        ]));
     }
 
 }

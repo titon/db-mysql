@@ -17,9 +17,7 @@ if (!file_exists(VENDOR_DIR . '/autoload.php')) {
 
 $loader = require VENDOR_DIR . '/autoload.php';
 $loader->add('Titon\\Db\\Mysql', TEST_DIR);
-$loader->add('Titon\\Db\\Data', VENDOR_DIR . '/titon/db/tests');
-$loader->add('Titon\\Db\\Driver', VENDOR_DIR . '/titon/db/tests');
-$loader->add('Titon\\Db\\Behavior', VENDOR_DIR . '/titon/db/tests');
+$loader->add('Titon\\Db', VENDOR_DIR . '/titon/db/tests');
 
 // Define database credentials
 $db = [
