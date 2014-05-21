@@ -1,4 +1,4 @@
-# DB\MySQL v0.4.0 [![Build Status](https://travis-ci.org/titon/db-mysql.png)](https://travis-ci.org/titon/db-mysql) #
+# DB\MySQL v0.5.0 [![Build Status](https://travis-ci.org/titon/db-mysql.png)](https://travis-ci.org/titon/db-mysql) #
 
 Provides MySQL access for the Titon DB package.
 
