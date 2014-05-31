@@ -23,7 +23,7 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
         parent::testBuildCreateIndex();
 
         $query = new Query(Query::CREATE_INDEX, new User());
-        $query->fields('profile_id')->from('users', 'idx')
+        $query->data(['profile_id'])->from('users', 'idx')
             ->attribute([
                 'type' => MysqlDialect::FULLTEXT,
                 'using' => function(Dialect $dialect) {
@@ -101,7 +101,7 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
 
     public function testBuildInsertIgnore() {
         $query = new Query(Query::INSERT, new User());
-        $query->from('foobar')->fields([
+        $query->from('foobar')->data([
             'email' => 'email@domain.com',
             'website' => 'http://titon.io'
         ]);
@@ -112,7 +112,7 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
 
     public function testBuildInsertPriority() {
         $query = new Query(Query::INSERT, new User());
-        $query->from('foobar')->fields([
+        $query->from('foobar')->data([
             'email' => 'email@domain.com',
             'website' => 'http://titon.io'
         ]);
@@ -176,14 +176,14 @@ class DialectTest extends \Titon\Db\Driver\DialectTest {
 
     public function testBuildUpdateIgnore() {
         $query = new Query(Query::UPDATE, new User());
-        $query->from('foobar')->fields(['username' => 'miles'])->attribute('ignore', true);
+        $query->from('foobar')->data(['username' => 'miles'])->attribute('ignore', true);
 
         $this->assertRegExp('/UPDATE\s+IGNORE\s+`foobar`\s+SET `username` = \?;/', $this->object->buildUpdate($query));
     }
 
     public function testBuildUpdatePriority() {
         $query = new Query(Query::UPDATE, new User());
-        $query->from('foobar')->fields(['username' => 'miles'])->attribute('priority', 'lowPriority');
+        $query->from('foobar')->data(['username' => 'miles'])->attribute('priority', 'lowPriority');
 
         $this->assertRegExp('/UPDATE LOW_PRIORITY  `foobar`\s+SET `username` = \?;/', $this->object->buildUpdate($query));
     }
